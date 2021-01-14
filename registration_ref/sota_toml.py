@@ -22,6 +22,7 @@ def _mk_config():
                 OrderedDict(
                     [
                         ("server", '"{gateway_server}"'),
+                        ("primary_ecu_hardware_id", '"{hardware_id}"'),
                     ]
                 ),
             ),
@@ -40,6 +41,7 @@ def _mk_config():
                     [
                         ("type", '"ostree+compose_apps"'),
                         ("ostree_server", '"{gateway_server}/treehub"'),
+                        ("compose_apps_root", '"{sota_config_dir}/compose-apps"'),
                     ]
                 ),
             ),
@@ -61,7 +63,7 @@ def _mk_config():
     )
 
 
-def sota_toml_fmt(overrides=None, sota_config_dir="/var/sota"):
+def sota_toml_fmt(overrides=None, sota_config_dir="/var/sota", hardware_id=""):
     d = _mk_config()
     if overrides:
         for section in overrides:
@@ -82,6 +84,7 @@ def sota_toml_fmt(overrides=None, sota_config_dir="/var/sota"):
                 v = v.format(
                     gateway_server=Settings.DEVICE_GATEWAY_SERVER,
                     sota_config_dir=sota_config_dir,
+                    hardware_id=hardware_id
                 )
                 ret.append("{} = {}".format(k, v))
         ret.append("")
